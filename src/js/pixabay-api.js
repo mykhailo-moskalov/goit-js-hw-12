@@ -1,7 +1,7 @@
 import axios from 'axios';
 import iziToast from 'izitoast';
 
-export function getImagesByQuery(query) {
+export function getImagesByQuery(query, page) {
   axios.defaults.baseURL = 'https://pixabay.com/api/';
 
   return axios

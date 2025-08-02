@@ -63,3 +63,15 @@ export function hideLoader() {
 
   loader.classList.add('hidden');
 }
+
+export function showLoadMoreButton() {
+  const loadMoreBtn = document.querySelector('button[type="button"]');
+
+  loadMoreBtn.classList.remove('hidden');
+}
+
+export function hideLoadMoreButton() {
+  const loadMoreBtn = document.querySelector('button[type="button"]');
+
+  loadMoreBtn.classList.add('hidden');
+}

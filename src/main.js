@@ -7,6 +7,8 @@ import {
   clearGallery,
   showLoader,
   hideLoader,
+  showLoadMoreButton,
+  hideLoadMoreButton,
 } from './js/render-functions';
 
 const form = document.querySelector('.form');
@@ -27,17 +29,21 @@ form.addEventListener('submit', e => {
   }
 
   showLoader();
-
+  hideLoadMoreButton();
   clearGallery();
 
   getImagesByQuery(searchQuery)
     .then(data => {
       hideLoader();
       createGallery(data.hits);
-      console.log(data);
+      showLoadMoreButton();
     })
     .catch(error => {
       hideLoader();
-      console.error(error);
+      iziToast.error({
+        message:
+          'Sorry, there are no images matching your search query. Please try again!',
+        position: 'topRight',
+      });
     });
 });
