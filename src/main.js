@@ -1,3 +1,4 @@
+import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
@@ -13,11 +14,16 @@ import {
 
 const form = document.querySelector('.form');
 const searchInput = document.querySelector('[type="text"]');
-const submitBtn = document.querySelector('[type="submit"]');
+export const loadMoreBtn = document.querySelector('button[type="button"]');
 
-form.addEventListener('submit', e => {
+let searchQuery = '';
+let page = 1;
+const PER_PAGE = 15;
+
+form.addEventListener('submit', async e => {
   e.preventDefault();
   const searchQuery = searchInput.value.trim();
+  page = 1;
 
   if (searchQuery === '') {
     iziToast.error({
@@ -32,18 +38,41 @@ form.addEventListener('submit', e => {
   hideLoadMoreButton();
   clearGallery();
 
-  getImagesByQuery(searchQuery)
-    .then(data => {
-      hideLoader();
-      createGallery(data.hits);
-      showLoadMoreButton();
-    })
-    .catch(error => {
-      hideLoader();
-      iziToast.error({
-        message:
-          'Sorry, there are no images matching your search query. Please try again!',
+  try {
+    const data = await getImagesByQuery(searchQuery, page, PER_PAGE);
+    hideLoader();
+
+    if (data.hits.length === 0) return;
+
+    createGallery(data.hits);
+    showLoadMoreButton();
+    page++;
+  } catch (error) {
+    hideLoader();
+  }
+});
+
+loadMoreBtn.addEventListener('click', async () => {
+  showLoader();
+  hideLoadMoreButton();
+
+  try {
+    const data = await getImagesByQuery(searchQuery, page, PER_PAGE);
+    hideLoader();
+
+    createGallery(data.hits);
+
+    if (data.hits.length < PER_PAGE) {
+      hideLoadMoreButton();
+      iziToast.info({
+        message: 'No more images to load.',
         position: 'topRight',
       });
-    });
+    } else {
+      showLoadMoreButton();
+      page++;
+    }
+  } catch (error) {
+    hideLoader();
+  }
 });

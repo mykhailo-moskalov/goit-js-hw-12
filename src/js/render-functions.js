@@ -1,6 +1,11 @@
 import SimpleLightbox from 'simplelightbox';
-
+import { loadMoreBtn } from '../main';
 const gallery = document.querySelector('ul.gallery');
+const galleryLightbox = new SimpleLightbox('.gallery a', {
+  captions: true,
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
 export function createGallery(images) {
   const markup = images
@@ -39,13 +44,8 @@ export function createGallery(images) {
     )
     .join('');
   gallery.innerHTML = markup;
-  const galleryLightbox = new SimpleLightbox('.gallery a', {
-    captions: true,
-    captionsData: 'alt',
-    captionDelay: 250,
-  });
 
-  //   modalImgWindow.refresh();
+  galleryLightbox.refresh();
 }
 
 export function clearGallery() {
@@ -65,13 +65,9 @@ export function hideLoader() {
 }
 
 export function showLoadMoreButton() {
-  const loadMoreBtn = document.querySelector('button[type="button"]');
-
   loadMoreBtn.classList.remove('hidden');
 }
 
 export function hideLoadMoreButton() {
-  const loadMoreBtn = document.querySelector('button[type="button"]');
-
   loadMoreBtn.classList.add('hidden');
 }

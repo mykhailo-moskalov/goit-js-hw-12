@@ -1,30 +1,37 @@
 import axios from 'axios';
 import iziToast from 'izitoast';
 
-export function getImagesByQuery(query, page) {
-  axios.defaults.baseURL = 'https://pixabay.com/api/';
+axios.defaults.baseURL = 'https://pixabay.com/api/';
 
-  return axios
-    .get('', {
+export async function getImagesByQuery(query, page = 1, perPage = 15) {
+  try {
+    const response = await axios.get('', {
       params: {
         key: '51584220-5b869931def1029bf82d58339',
         q: query,
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: true,
+        page,
+        per_page: perPage,
       },
-    })
-    .then(response => {
-      if (response.data.hits.length === 0) {
-        iziToast.error({
-          message:
-            'Sorry, there are no images matching your search query. Please try again!',
-          position: 'topRight',
-        });
-      }
-      return response.data;
-    })
-    .catch(error => {
-      throw error;
     });
+
+    if (response.data.hits.length === 0) {
+      iziToast.error({
+        message:
+          'Sorry, there are no images matching your search query. Please try again!',
+        position: 'topRight',
+      });
+    }
+
+    return response.data;
+  } catch (error) {
+    iziToast.error({
+      message:
+        'Sorry, there are no images matching your search query. Please try again!',
+      position: 'topRight',
+    });
+    throw error;
+  }
 }
