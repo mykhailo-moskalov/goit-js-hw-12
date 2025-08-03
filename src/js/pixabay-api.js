@@ -3,7 +3,7 @@ import iziToast from 'izitoast';
 
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 
-export async function getImagesByQuery(query, page = 1, perPage = 15) {
+export async function getImagesByQuery(query, page) {
   try {
     const response = await axios.get('', {
       params: {
@@ -12,8 +12,8 @@ export async function getImagesByQuery(query, page = 1, perPage = 15) {
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: true,
-        page,
-        per_page: perPage,
+        page: page,
+        per_page: 15,
       },
     });
 

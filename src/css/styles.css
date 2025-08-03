@@ -8,8 +8,6 @@
 }
 
 .loader {
-  /* margin: 0 auto; */
-
   position: absolute;
   transform: rotateZ(45deg);
   perspective: 1000px;
@@ -31,6 +29,19 @@
   transform: rotateX(70deg);
   animation: 1s spin linear infinite;
 }
+.loader-bottom {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  margin: 20px auto;
+}
+
+.loader-bottom:before,
+.loader-bottom:after {
+  top: 0;
+  left: 0;
+}
+
 .loader:after {
   color: #4e75ff;
   transform: rotateY(70deg);

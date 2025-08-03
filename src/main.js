@@ -10,37 +10,35 @@ import {
   hideLoader,
   showLoadMoreButton,
   hideLoadMoreButton,
+  loadMoreBtn,
 } from './js/render-functions';
 
 const form = document.querySelector('.form');
 const searchInput = document.querySelector('[type="text"]');
-export const loadMoreBtn = document.querySelector('button[type="button"]');
 
 let searchQuery = '';
 let page = 1;
-const PER_PAGE = 15;
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
-  const searchQuery = searchInput.value.trim();
+  searchQuery = searchInput.value.trim();
   page = 1;
 
   if (searchQuery === '') {
     iziToast.error({
-      message:
-        'Sorry, there are no images matching your search query. Please try again!',
+      message: 'Please enter a search term!',
       position: 'topRight',
     });
     return;
   }
 
-  showLoader();
+  showLoader('.loader-top');
   hideLoadMoreButton();
   clearGallery();
 
   try {
-    const data = await getImagesByQuery(searchQuery, page, PER_PAGE);
-    hideLoader();
+    const data = await getImagesByQuery(searchQuery, page);
+    hideLoader('.loader-top');
 
     if (data.hits.length === 0) return;
 
@@ -48,24 +46,24 @@ form.addEventListener('submit', async e => {
     showLoadMoreButton();
     page++;
   } catch (error) {
-    hideLoader();
+    hideLoader('.loader-top');
   }
 });
 
 loadMoreBtn.addEventListener('click', async () => {
-  showLoader();
+  showLoader('.loader-bottom');
   hideLoadMoreButton();
 
   try {
-    const data = await getImagesByQuery(searchQuery, page, PER_PAGE);
-    hideLoader();
+    const data = await getImagesByQuery(searchQuery, page);
+    hideLoader('.loader-bottom');
 
     createGallery(data.hits);
 
-    if (data.hits.length < PER_PAGE) {
+    if (data.hits.length < 15) {
       hideLoadMoreButton();
       iziToast.info({
-        message: 'No more images to load.',
+        message: "We're sorry, but you've reached the end of search results.",
         position: 'topRight',
       });
     } else {
@@ -73,6 +71,6 @@ loadMoreBtn.addEventListener('click', async () => {
       page++;
     }
   } catch (error) {
-    hideLoader();
+    hideLoader('.loader-bottom');
   }
 });
