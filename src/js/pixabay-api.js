@@ -27,11 +27,6 @@ export async function getImagesByQuery(query, page) {
 
     return response.data;
   } catch (error) {
-    iziToast.error({
-      message:
-        'Sorry, there are no images matching your search query. Please try again!',
-      position: 'topRight',
-    });
     throw error;
   }
 }
